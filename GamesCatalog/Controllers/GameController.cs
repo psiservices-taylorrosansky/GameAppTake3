@@ -1,83 +1,78 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using GamesCatalog.Models;
+using Insight.Database;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+//using GamesCatalog.Database;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GamesCatalog.Controllers
 {
-    public class GameController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GameController : ControllerBase
     {
-        // GET: GameController
-        public ActionResult Index()
+        private readonly IDbConnection _dbConnection;
+
+        public GameController(IConfiguration configuration)
         {
-            return View();
+            //Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            _dbConnection = new SqlConnection(connectionString);
         }
 
-        // GET: GameController/Details/5
-        public ActionResult Details(int id)
+
+        //GET: api/Game
+        [HttpGet]
+        public IEnumerable<Game> Get()
         {
-            return View();
+            return _dbConnection.Query<Game>("GetAllGames");
         }
 
-        // GET: GameController/Create
-        public ActionResult Create()
+        // GET api/<GameController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
         {
-            return View();
+            return "value";
         }
 
-        // POST: GameController/Create
+        // POST api/<GameController>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public void Post([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
-        // GET: GameController/Edit/5
-        public ActionResult Edit(int id)
+        // PUT api/<GameController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
         {
-            return View();
         }
 
-        // POST: GameController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // DELETE api/<GameController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: GameController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: GameController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
+
+////GET: api/<GameController>
+//[HttpGet]
+//public IEnumerable<Game> Get()
+//{
+//    var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameInsightDB;Integrated Security=True");
+//    return connection.Query<Game>("GetAllGames");
+//}
+
+// GET: api/<GameController>
+//[HttpGet]
+//public IEnumerable<Game> Get(int pageIndex = 1, int pageSize = 10) 
+//{
+//    var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameInsightDB;Integrated Security=True");
+//    var parameters = new { PageIndex = pageIndex - 1, PageSize = pageSize };
+//    return connection.Query<Game>("GetAllGames", parameters);
+//}
