@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using GamesCatalog.ViewModels;
 //using GamesCatalog.Database;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,17 +34,25 @@ namespace GamesCatalog.Controllers
             return _dbConnection.Query<Game>("GetAllGames");
         }
 
-        // GET api/<GameController>/5
+        // GET api/Game/{id}
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IEnumerable<Game> Get(int id)
         {
-            return "value";
+            return _dbConnection.Query<Game>("GetGameById", new { Id = id });
         }
 
-        // POST api/<GameController>
+        // POST api/Game
+        // Correct DateTime entry example: "releaseDate": "2023-06-21T19:43:48.958Z"
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] AddGame request)
         {
+            var game = new Game
+            {
+                Name = request.Name,
+                ReleaseDate = request.ReleaseDate,
+                Developer = request.Developer
+            };
+            _dbConnection.Execute("AddGame", game);
         }
 
         // PUT api/<GameController>/5

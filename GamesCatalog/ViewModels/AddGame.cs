@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GamesCatalog.Models
+namespace GamesCatalog.ViewModels
 {
-    public class Game
+    public class AddGame
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         [DataType(DataType.DateTime)]
-        public DateTime? ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
         public string Developer { get; set; }
     }
 }
