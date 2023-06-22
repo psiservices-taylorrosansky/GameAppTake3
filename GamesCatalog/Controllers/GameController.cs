@@ -21,7 +21,6 @@ namespace GamesCatalog.Controllers
 
         public GameController(IConfiguration configuration)
         {
-            //Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             _dbConnection = new SqlConnection(connectionString);
         }
@@ -48,7 +47,7 @@ namespace GamesCatalog.Controllers
         {
             if (String.IsNullOrEmpty(request.Name) || String.IsNullOrEmpty(request.Developer))
             {
-                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!")
+                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!");
             }
             var game = new Game
             {
@@ -65,7 +64,7 @@ namespace GamesCatalog.Controllers
         {
             if(String.IsNullOrEmpty(request.Name) || String.IsNullOrEmpty(request.Developer))
             {
-                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!")
+                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!");
             }
             var updatedGame = new Game
             {
