@@ -46,6 +46,14 @@ namespace GamesCatalog.Controllers
         [HttpPost]
         public void Post([FromBody] AddGame request)
         {
+            if(String.IsNullOrEmpty(request.Name))
+            {
+                throw new ArgumentException("Name field must be filled");
+            }
+            if (String.IsNullOrEmpty(request.Developer))
+            {
+                throw new ArgumentException("Developer field must be filled");
+            }
             var game = new Game
             {
                 Name = request.Name,
@@ -55,10 +63,19 @@ namespace GamesCatalog.Controllers
             _dbConnection.Execute("AddGame", game);
         }
 
-        // PUT api/<GameController>/5
+        // PUT api/Game/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] AddGame request)
         {
+            var updatedGame = new Game
+            {
+                Id = id,
+                Name = request.Name,
+                ReleaseDate = request.ReleaseDate,
+                Developer = request.Developer
+            };
+            var w = _dbConnection.Execute("UpdateGame", updatedGame);
+            //Console.WriteLine(w.GetType());
         }
 
         // DELETE api/<GameController>/5
@@ -69,19 +86,3 @@ namespace GamesCatalog.Controllers
     }
 }
 
-////GET: api/<GameController>
-//[HttpGet]
-//public IEnumerable<Game> Get()
-//{
-//    var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameInsightDB;Integrated Security=True");
-//    return connection.Query<Game>("GetAllGames");
-//}
-
-// GET: api/<GameController>
-//[HttpGet]
-//public IEnumerable<Game> Get(int pageIndex = 1, int pageSize = 10) 
-//{
-//    var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GameInsightDB;Integrated Security=True");
-//    var parameters = new { PageIndex = pageIndex - 1, PageSize = pageSize };
-//    return connection.Query<Game>("GetAllGames", parameters);
-//}
