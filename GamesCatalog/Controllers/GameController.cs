@@ -21,7 +21,7 @@ namespace GamesCatalog.Controllers
 
         public GameController(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("GamesDBConnection");
             _dbConnection = new SqlConnection(connectionString);
         }
 

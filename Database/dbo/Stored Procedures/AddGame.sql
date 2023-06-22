@@ -1,9 +1,9 @@
 CREATE PROCEDURE [dbo].[AddGame]
 	@Name VARCHAR(50),
-	@ReleaseDate DATETIME(7) = NULL,
+	@ReleaseDate datetime2(7) = NULL,
 	@Developer VARCHAR(50)
 AS
 BEGIN
 	INSERT INTO GamesTable(Name, ReleaseDate, Developer)
-	VALUES(@Name, @RelaseDate, @Developer)
+	VALUES(@Name, @ReleaseDate, @Developer)
 END
