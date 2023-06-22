@@ -46,13 +46,9 @@ namespace GamesCatalog.Controllers
         [HttpPost]
         public void Post([FromBody] AddGame request)
         {
-            if(String.IsNullOrEmpty(request.Name))
+            if (String.IsNullOrEmpty(request.Name) || String.IsNullOrEmpty(request.Developer))
             {
-                throw new ArgumentException("Name field must be filled");
-            }
-            if (String.IsNullOrEmpty(request.Developer))
-            {
-                throw new ArgumentException("Developer field must be filled");
+                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!")
             }
             var game = new Game
             {
@@ -67,6 +63,10 @@ namespace GamesCatalog.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] AddGame request)
         {
+            if(String.IsNullOrEmpty(request.Name) || String.IsNullOrEmpty(request.Developer))
+            {
+                throw new ArgumentException("**ERROR: Name and Developer fields must be filled!")
+            }
             var updatedGame = new Game
             {
                 Id = id,
@@ -74,15 +74,20 @@ namespace GamesCatalog.Controllers
                 ReleaseDate = request.ReleaseDate,
                 Developer = request.Developer
             };
-            _dbConnection.Execute("UpdateGame", updatedGame);
-            //Console.WriteLine(w.GetType());
+            if(_dbConnection.Execute("UpdateGame", updatedGame) == 0)
+            {
+                throw new ArgumentException("**ERROR: Failed to update record!");
+            }
         }
 
         // DELETE api/Game/{id}
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _dbConnection.Execute("DeleteGame", new { Id = id });
+            if(_dbConnection.Execute("DeleteGame", new { Id = id }) == 0)
+            {
+                throw new ArgumentException("**ERROR: Failed to delete record!");
+            }
         }
     }
 }
