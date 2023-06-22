@@ -74,14 +74,15 @@ namespace GamesCatalog.Controllers
                 ReleaseDate = request.ReleaseDate,
                 Developer = request.Developer
             };
-            var w = _dbConnection.Execute("UpdateGame", updatedGame);
+            _dbConnection.Execute("UpdateGame", updatedGame);
             //Console.WriteLine(w.GetType());
         }
 
-        // DELETE api/<GameController>/5
+        // DELETE api/Game/{id}
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _dbConnection.Execute("DeleteGame", new { Id = id });
         }
     }
 }
